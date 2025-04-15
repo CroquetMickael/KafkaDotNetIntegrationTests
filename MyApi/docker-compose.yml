@@ -1,0 +1,59 @@
+version: "3.8"
+services:
+  microcks:
+    image: quay.io/microcks/microcks-uber:1.11.0
+    container_name: microcks
+    environment:
+      - ASYNC_MINION_URL=microcks-async:8081
+      - HTTP_PROXY=
+      - http_proxy=
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./config:/deployments/config"
+
+  microcks-async:
+    image: quay.io/microcks/microcks-uber-async-minion:1.11.0
+    environment:
+      - KAFKA_BOOTSTRAP_SERVER=kafka:19092
+      - MICROCKS_HOST_PORT=microcks:8080
+      - QUARKUS_PROFILE=docker-compose
+      - HTTP_PROXY=
+      - http_proxy=
+    ports:
+      - "8081:8081"
+    depends_on:
+      - microcks
+    volumes:
+      - "./config:/deployments/config"
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+      - "19092:19092"
+      - "19093:19093"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9092,OUTSIDE://:19092,DOCKER://localhost:19093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT,DOCKER:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:19092,DOCKER://0.0.0.0:19093
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "meteo:1:1"
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    restart: "no"
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "kafka:9092"
+    depends_on:
+      - "kafka"
