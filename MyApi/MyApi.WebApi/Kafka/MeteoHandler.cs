@@ -1,4 +1,4 @@
-﻿namespace MyApi.WebApi.Kafka;
+namespace MyApi.WebApi.Kafka;
 
 public class MeteoHandler: IMeteoHandler
 {

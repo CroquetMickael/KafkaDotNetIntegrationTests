@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using MyApi.WebApi.Kafka;
 
 public class MeteoConsumerBackgroundService : BackgroundService
