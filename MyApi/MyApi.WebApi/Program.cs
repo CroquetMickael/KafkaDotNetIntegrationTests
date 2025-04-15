@@ -1,6 +1,8 @@
+using Confluent.Kafka;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MyApi.WebApi;
+using MyApi.WebApi.Kafka;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,13 +19,23 @@ builder.Services.AddSwaggerGen(c => c.MapType<DateOnly>(() => new OpenApiSchema
     Format = "date"
 }));
 
-var connectionString = builder.Configuration.GetSection("ConnectionStrings")["WeatherContext"];
-
-builder.Services.AddDbContext<WeatherContext>(options =>
-    options.UseSqlServer(connectionString, providerOptions =>
+// Configuration Kafka
+builder.Services.AddSingleton(provider =>
+{
+    var config = new ConsumerConfig
     {
-        providerOptions.EnableRetryOnFailure();
-    }));
+        BootstrapServers = "localhost:19093",
+        GroupId = "1",
+        AutoOffsetReset = AutoOffsetReset.Earliest
+    };
+    return new ConsumerBuilder<string, string>(config).Build();
+});
+
+builder.Services.AddTransient<IMeteoConsumer, MeteoConsumer>();
+builder.Services.AddTransient<MeteoHandler>();
+builder.Services.AddHostedService<MeteoConsumerBackgroundService>();
+
+var connectionString = builder.Configuration.GetSection("ConnectionStrings")["WeatherContext"];
 
 var app = builder.Build();
 
