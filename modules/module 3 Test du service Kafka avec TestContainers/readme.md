@@ -2,7 +2,7 @@
 
 ## Qu'allons-nous faire?
 
-Comme vu dans le module 2, nous n'avons en réalité pas tester notre application, ajustons cela en passant par un testContainer Kafka qui permettra de produce un vrai message.
+Comme vu dans le module 2, nous n'avons en réalité pas testé notre application, ajustons cela en passant par un testContainer Kafka qui permettra de produire un vrai message.
 
 ## Instructions
 
@@ -10,7 +10,7 @@ Comme vu dans le module 2, nous n'avons en réalité pas tester notre applicatio
 
 Nous allons devoir modifier le code applicatif pour pouvoir injecter un `IMeteoHandler`, le but étant d'effectuer un mock de cette interface dans notre test plus tard.
 
-Nous allons aussi devoir gérer les exceptions lié à l'arrêt d'un service via l'exception `OperationCanceledException`
+Nous allons aussi devoir gérer les exceptions liées à l'arrêt d'un service via l'exception `OperationCanceledException`
 
 Il faudra modifier le backgroundService pour accepter notre nouvelle interface via de l'injection de dépendance.
 
@@ -73,7 +73,8 @@ public class MeteoConsumerBackgroundService : BackgroundService
 - public MeteoConsumerBackgroundService(IMeteoConsumer kafkaConsumer, IServiceProvider provider)
 + public MeteoConsumerBackgroundService(IMeteoConsumer kafkaConsumer, IMeteoHandler meteoHandler, IServiceScopeFactory serviceScopeFactory)
     {
-        _kafkaConsumer = kafkaConsumer;
+         _kafkaConsumer = kafkaConsumer;
+-        _provider = provider;
 +        _meteoHandler = meteoHandler;
 +        _providerScopeFactory = serviceScopeFactory;
     }
@@ -118,7 +119,7 @@ Bien notre code applicatif est prêt, modifions notre test pour accepter ces cha
 
 ### Modification du code de test
 
-Pour utiliser Test Container & Kafka Test Container, il est obligatoire d'installer `   Testcontainers` & `Testcontainers.Kafka`. Néanmoins pour des soucis de simplicité, les deux références à ces packages Nugets sont déjà présente dans `MyApi.WebApi.Tests.csproj`
+Pour utiliser Test Container & Kafka Test Container, il est obligatoire d'installer `Testcontainers` & `Testcontainers.Kafka`. Néanmoins pour des soucis de simplicité, les deux références à ces packages Nugets sont déjà présentes dans `MyApi.WebApi.Tests.csproj`
 
 Nous allons commencer par modifier le hook de démarrage de notre test `InitWebApplicationFactory.cs`
 
@@ -128,7 +129,7 @@ Nous allons commencer par modifier le hook de démarrage de notre test `InitWebA
 await InitializeRespawnAsync();
 
 +        var kafkaContainer = new KafkaBuilder()
-+         .WithImage("confluentinc/cp-kafka:latest")
++         .WithImage("confluentinc/cp-kafka:7.0.0")
 +            .WithEnvironment("KAFKA_BROKER_ID", "1")
 +            .WithEnvironment("KAFKA_ZOOKEEPER_CONNECT", "localhost:2181")
 +            .WithEnvironment("KAFKA_ADVERTISED_LISTENERS", "PLAINTEXT://localhost:9092")
@@ -227,7 +228,7 @@ private static async Task CreateKafkaTopicAsync(string bootstrapServers, string 
 
 ### Modification des steps
 
-Nous devons modifier le code de nos steps pour intégrer les modifications apporté dans nos classes et notre hook de démarrage.
+Nous devons modifier le code de nos steps pour intégrer les modifications apportées dans nos classes et notre hook de démarrage.
 
 #### WeatherKafkaSteps.cs
 
@@ -290,7 +291,7 @@ using MyApi.WebApi.Kafka;
     }
 ```
 
-La nouvelle version de la méthode `WhenTheMeteoConsumerServiceStarts` remplace l'utilisation d'un mock de `IMeteoConsumer` par une instance réelle, permettant de tester le service dans un environnement plus réaliste. Elle crée et démarre un service en arrière-plan (`MeteoConsumerBackgroundService`) avec un `CancellationTokenSource` pour gérer l'annulation, intégrant ainsi la consommation de messages.
+La nouvelle version de la méthode `WhenTheMeteoConsumerServiceStarts` remplace l'utilisation d'un mock de `IMeteoConsumer` par une instance réelle, permettant de tester le service dans un environnement plus réaliste. Elle crée et démarre un service en arrière-plan (`MeteoConsumerBackgroundService`) avec un `CancellationTokenSource` pour gérer l'annulation, intégrant ainsi que la consommation de messages.
 
 De plus, elle configure un producteur Kafka pour envoyer un message au topic "meteo", tandis que l'ancienne version ne gérait pas la production de messages.
 
@@ -327,12 +328,12 @@ Au lieu d'utiliser directement une instance de `MeteoHandler`, elle s'appuie sur
 
 Enfin, le message est récupéré à partir du contexte, garantissant que le bon contenu est vérifié.
 
-Vous pouvez relancé le test, celui-ci sera en succès, ici comme vous l'avez vu, nous utilisons une vrai file kafka avec test container, et nous démarrons réellement notre background service.
+Vous pouvez relancer le test, celui-ci sera en succès, ici comme vous l'avez vu, nous utilisons une vrai file kafka avec test container, et nous démarrons réellement notre background service.
 
-Nous sommes donc passé d'un semblant de test a un test d'intégration complet, seul la partie `Handler` n'est pas testé mais cela dépendra de votre code applicatif, ici comme précisé plus tôt dans ce DOJO, j'ai tenté de gardé un fonctionnement très simple.
+Nous sommes donc passé d'un semblant de test à un test d'intégration complet, seul la partie Handler n'est pas testé mais cela dépendra de votre code applicatif, ici comme précisé plus tôt dans ce DOJO, j'ai tenté de garder un fonctionnement très simple.
 
 ```
 git clone https://github.com/CroquetMickael/KafkaDotNetIntegrationTests.git --branch feature/module3
 ```
 
-[suivant >](../Module%202%20Ajout%20des%20tests%20du%20service%20externe/readme.md)
+[suivant >](../module%204%20Test%20du%20service%20Kafka%20avec%20Microcks/readme.md)
