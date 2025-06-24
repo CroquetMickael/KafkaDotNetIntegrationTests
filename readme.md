@@ -24,4 +24,4 @@ L'accompagnement sera très présent au début, puis s'atténuera progressivemen
 
 ### [Module 3: Test du service Kafka avec TestContainers](./modules/module%203%20Test%20du%20service%20Kafka%20avec%20TestContainers/readme.md)
 
-### [Module 4: module 4 Test du service Kafka avec Microcks](./modules/module%204%20Test%20du%20service%20Kafka%20avec%20Microcks/readme.md)
+### [Module 4: Test du service Kafka avec Microcks](./modules/module%204%20Test%20du%20service%20Kafka%20avec%20Microcks/readme.md)

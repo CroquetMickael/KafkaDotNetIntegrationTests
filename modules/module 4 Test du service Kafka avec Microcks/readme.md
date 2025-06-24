@@ -2,11 +2,11 @@
 
 ## Qu'allons-nous faire?
 
-Nous allons intégré notre solution de lecture Kafka avec Microcks dans l'usage de notre application puis par la suite dans notre test.
+Nous allons intégrer notre solution de lecture Kafka avec Microcks dans l'usage de notre application puis par la suite dans notre test.
 
 ## Instructions
 
-Dans un premier temps, nous allons ajouter 2 fichiers de configuration pour notre docker / podman, ces 2 fichiers seront lu par Microcks pour démarrer le processus de mock des Async API (Queue, Kafka, etc...)
+Dans un premier temps, nous allons ajouter 2 fichiers de configuration pour notre docker / podman, ces 2 fichiers seront lus par Microcks pour démarrer le processus de mock des Async API (Queue, Kafka, etc...)
 
 ## C'est quoi concrétement Microcks ?
 
@@ -140,7 +140,7 @@ Voici quelques points clés concernant `AsyncAPI` :
 
 **Documentation et outils** : Comme `OpenAPI`, `AsyncAPI` permet de générer automatiquement de la documentation interactive, des SDK, et des tests, facilitant ainsi le développement et l'intégration des services.
 
-**Interactions basées sur des événements** : Avec `AsyncAPI`, les développeurs peuvent mieux gérer les interactions basées sur des événements, en précisant comment les différents services s'écoutent et se communiquent.
+**Interactions basées sur des événements** : Avec `AsyncAPI`, les développeurs peuvent mieux gérer les interactions basées sur des événements, en précisant comment les différents services s'écoutent et communiquent.
 
 En résumé, `AsyncAPI` est une initiative précieuse pour les architectes et développeurs qui travaillent avec des systèmes asynchrones, leur permettant de mieux structurer et documenter leurs architectures basées sur des événements.
 
@@ -261,7 +261,7 @@ Maintenant que notre Kafka & Microcks fonctionne ensemble et que l'on reçoit un
 
 ### Code Applicatif
 
-Dans un premier temps, nous allons modifier le fichier `MyApi/MyApi.WebApi/Kafka/MeteoConsumerBackgroundService.cs` pour recevoir un nouveau paramêtre dans le constructeur qui sera le topic à consommer.
+Dans un premier temps, nous allons modifier le fichier `MyApi/MyApi.WebApi/Kafka/MeteoConsumerBackgroundService.cs` pour recevoir un nouveau paramètre dans le constructeur qui sera le topic à consommer.
 
 #### Background service
 
@@ -333,9 +333,9 @@ Et maintenant si on modifié nos tests pour utiliser Microcks et donc le fichier
 
 ### Modification des tests
 
-Dans un premier temps, nous devons installer le package `Microcks.Testcontainers` penser bien à prendre une version équivalente ou supérieur à `0.2.0`
+Dans un premier temps, nous devons installer le package `Microcks.Testcontainers` pensez bien à prendre une version équivalente ou supérieur à `0.2.0`
 
-Une fois installé, nous allons créer un dossier `Mock` dans la solution de test soit `MyApi/MyApi.WebApi.Tests/Mocks`
+Une fois installé, nous allons créer un dossier `Mocks` dans la solution de test soit `MyApi/MyApi.WebApi.Tests/Mocks`
 
 Ajouter par la suite un nouveau fichier déjà existant, et choissisez l'option "Ajouter en tant que lien"
 
@@ -351,7 +351,7 @@ Bien maintenant nous devons modifier du code dans notre hook de démarrage et no
 
 #### InitWebApplicationFactory.cs
 
-Créeons une nouvelle fonction nommé `ReplaceKafkaMicrocks` qui s'occupera de créer un réseau, gérer la connexion entre le test container Kafka & Microcks.
+Créeons une nouvelle fonction nommée `ReplaceKafkaMicrocks` qui s'occupera de créer un réseau, gérer la connexion entre le test container Kafka & Microcks.
 
 ```c#
 private async static Task ReplaceKafkaMicrocks(ScenarioContext scenarioContext)
@@ -362,7 +362,7 @@ private async static Task ReplaceKafkaMicrocks(ScenarioContext scenarioContext)
     var listener = "test-kafka:19092";
 
     var kafkaContainer = new KafkaBuilder()
-            .WithImage("confluentinc/cp-kafka:latest")
+            .WithImage("confluentinc/cp-kafka:7.0.0")
             .WithNetwork(network)
             .WithListener(listener)
             .WithNetworkAliases("test-kafka")
@@ -404,7 +404,7 @@ Remplaçons l'ancien code de génération des tests Containers:
 
 ```diff
 -        var kafkaContainer = new KafkaBuilder()
--         .WithImage("confluentinc/cp-kafka:latest")
+-         .WithImage("confluentinc/cp-kafka:7.0.0")
 -            .WithEnvironment("KAFKA_BROKER_ID", "1")
 -            .WithEnvironment("KAFKA_ZOOKEEPER_CONNECT", "localhost:2181")
 -            .WithEnvironment("KAFKA_ADVERTISED_LISTENERS", "PLAINTEXT://localhost:9092")

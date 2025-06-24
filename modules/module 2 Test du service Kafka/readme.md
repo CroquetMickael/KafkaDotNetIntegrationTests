@@ -1,4 +1,4 @@
-# Module 1: création du projet de test
+# Module 2: Test du service Kafka
 
 ## Qu'allons-nous faire?
 
@@ -72,13 +72,13 @@ internal class WeatherKafkaSteps
 }
 ```
 
-Bien qu'on ai définit le Gherkin & les steps associé via notre code en C#, il nous faut modifier le hook de démarrage de nos tests.
+Bien qu'on ait défini le Gherkin & les steps associées via notre code en C#, il nous faut modifier le hook de démarrage de nos tests.
 
 ### InitWebApplicationFactory.cs
 
 Pour modifier le hook de démarrage, il faut modifier le fichier `InitWebApplicationFactory.cs`
 
-Nous allons ajouter une nouvelle fonction privée nommé `ReplaceKafka`
+Nous allons ajouter une nouvelle fonction privée nommée `ReplaceKafka`
 
 ```c#
 private static void ReplaceKafka(IServiceCollection services, ScenarioContext scenarioContext)
@@ -118,7 +118,7 @@ Si vous lancez vos test, vous devriez voir un nouveau test lié à Kafka et il s
 
 Non en réalité, ce test ne fait rien de réel, mais c'est voulu, en démontrant qu'il était très compliqué de tester Kafka en utilisant simplement MOQ.
 
-Pour tester de manière pertinente, il faut démarrer le background service et envoyé un message dans le consommateur.
+Pour tester de manière pertinente, il faut démarrer le background service et envoyer un message dans le consommateur.
 
 Pour résumer :
 
@@ -131,10 +131,10 @@ Pour un vrai test d’intégration
 - Laissez le service consommer ce message.
 - Vérifiez que le handler a bien été appelé.
 
-Nous allons voir dans le prochain module comment intégrer un test container qui permettra de consommer un vrai message Kafka dans notre test et ainsi gommé le manque d'efficacité présent ici.
+Nous allons voir dans le prochain module comment intégrer un test container qui permettra de consommer un vrai message Kafka dans notre test et ainsi gommer le manque d'efficacité présent ici.
 
 ```
 git clone https://github.com/CroquetMickael/KafkaDotNetIntegrationTests.git --branch feature/module2
 ```
 
-[suivant >](../Module%202%20Ajout%20des%20tests%20du%20service%20externe/readme.md)
+[suivant >](../module%203%20Test%20du%20service%20Kafka%20avec%20TestContainers/readme.md)

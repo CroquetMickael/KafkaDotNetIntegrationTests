@@ -1,4 +1,4 @@
-# Module 1: création du projet de test
+# Module 1: intégration d'un service kafka
 
 ## Qu'allons-nous faire?
 
@@ -175,7 +175,7 @@ Dans le MeteoHandler, vous pouvez gérer le message de la manière que vous souh
 
 ### MeteoConsumerBackgroundService
 
-Dans ce fichier nous allons utilisé notre topic Kafka que nous allons consumer avec le `Consumer` définit plus tôt ainsi que le handler.
+Dans ce fichier nous allons utiliser notre topic Kafka que nous allons consommer avec le `Consumer` définit plus tôt ainsi que le handler.
 
 Ce Background service va être lancé quand l'application démarre et sera en tâche de fond.
 
@@ -214,13 +214,9 @@ public class MeteoConsumerBackgroundService : BackgroundService
 }
 ```
 
-```
-git clone https://github.com/CroquetMickael/KafkaDotNetIntegrationTests.git --branch feature/module1
-```
-
 ## Modification du Program.cs
 
-Une fois l'ensemble de ces classes et interface créée, nous avons besoin d'effectuer de l'injection de dépendance dans le `program.cs`
+Une fois l'ensemble de ces classes et interface créés, nous avons besoin d'effectuer de l'injection de dépendance dans le `program.cs`
 
 Ainsi que le démarrage de notre backgroundService.
 
@@ -242,7 +238,7 @@ builder.Services.AddTransient<MeteoHandler>();
 builder.Services.AddHostedService<MeteoConsumerBackgroundService>();
 ```
 
-Comme vous pouvez le constater, nous créer un singleton gérant notre connexion au broker Kafka, le `localhost:9093` est récupérer principalement par le port exposé dans notre `docker-compose.yml`
+Comme vous pouvez le constater, nous avons crée un singleton gérant notre connexion au broker Kafka, le `localhost:9093` est récupéré principalement par le port exposé dansnotre `docker-compose.yml`
 
 Nous démarrons aussi notre background service via `builder.Services.AddHostedService<MeteoConsumerBackgroundService>();`
 
@@ -252,7 +248,7 @@ Nous allons lancer le projet .net, vous devriez avoir une fenêtre de commande q
 
 Connectez vous à [Kafdrop](http://localhost:9000)
 
-Cliqué sur le broker associé que l'on a nommé `meteo` puis sur la partition `0`, vous verrez l'ensemble des messages reçu par le broker Kafka dans cette partition.
+Cliquer sur le topic associé que l'on a nommé `meteo` puis sur la partition `0`, vous verrez l'ensemble des messages reçu par le broker Kafka dans cette partition.
 
 Cliquez sur `Add Message` et remplissez avec les informations suivantes:
 
@@ -264,18 +260,18 @@ Cliquez sur `Add Message` et remplissez avec les informations suivantes:
 
 ![Kafdrop add](./img/kafdropAdd.png)
 
-Deux choses vont ce passer, vous devriez voir votre message sur Kafdrop apparaitre et surtout si vous reprenez votre invité de commande, vous verrez notre message dedans.
+Deux choses vont se passer vous devriez voir votre message sur Kafdrop apparaître et surtout si vous reprenez votre invite de commande, vous verrez notre message dedans.
 
 ![KafdropMessage](./img/Kafdrop.png)
 
 ![Terminal message](./img/TerminalMessage.png)
 
-Vous venez de consommer votre message Kafka, nous allons effectuer des tests sur les différentes classe implémenter.
+Vous venez de consommer votre message Kafka, nous allons effectuer des tests sur les différentes classes implémentées.
 
-En cas de soucis d'implémentation vous pouvez allez sur la branche git suivante qui contient la correction :
+En cas de soucis d'implémentation vous pouvez aller sur la branche git suivante qui contient la correction :
 
 ```
 git clone https://github.com/CroquetMickael/KafkaDotNetIntegrationTests.git --branch feature/module1
 ```
 
-[suivant >](../Module%202%20Ajout%20des%20tests%20du%20service%20externe/readme.md)
+[suivant >](../module%202%20Test%20du%20service%20Kafka/readme.md)
