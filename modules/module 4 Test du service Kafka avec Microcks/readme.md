@@ -37,7 +37,7 @@ Le second sera `application.properties`, placez le au même endroit que le fichi
 async-api.enabled=true
 
 # Access to Microcks API server.
-%docker-compose.io.github.microcks.minion.async.client.MicrocksAPIConnector/mp-rest/url=http://host.docker.internal:8585
+%docker-compose.io.github.microcks.minion.async.client.MicrocksAPIConnector/mp-rest/url=http://host.docker.internal:8080
 
 # Access to Kafka broker.
 %docker-compose.kafka.bootstrap.servers=kafka:19092
@@ -58,7 +58,7 @@ Cette option permet au système de gérer des appels non bloquants, ce qui est c
 
 Ensuite, nous devons configurer l'accès à l'API de Microcks. Cela se fait via la ligne :
 
-`%docker-compose.io.github.microcks.minion.async.client.MicrocksAPIConnector/mp-rest/url=http://host.docker.internal:8585`
+`%docker-compose.io.github.microcks.minion.async.client.MicrocksAPIConnector/mp-rest/url=http://host.docker.internal:8080`
 
 Cette configuration définit l'URL à laquelle les composants peuvent se connecter pour effectuer des opérations asynchrones avec le serveur API de Microcks.
 
@@ -126,7 +126,17 @@ Enfin, nous avons la configuration pour le point de terminaison WebSocket :
 
 Cette ligne définit l'adresse à laquelle les services peuvent se connecter pour utiliser le protocole WebSocket (WS). Le port 8081 est utilisé pour établir des connexions WebSocket, permettant une communication bidirectionnelle en temps réel entre les services.
 
-Maintenant que vous avez confiuguré Microcks pour démarrer proprement la gestion des evenemments Async, créeons un fichier de type `AsyncApi`
+Relancer le projet docker / podman pour prendre en compte le changement de ces 2 fichiers.
+
+Rappel des commandes : 
+
+Lancez le avec l'une des commandes suivante:
+
+- Docker: `docker compose up -d`
+- Podman: `podman-compose up -d`
+
+
+Maintenant que vous avez configuré Microcks pour démarrer proprement la gestion des evenemments Async, créeons un fichier de type `AsyncApi`
 
 ### Fichier Async API
 
@@ -220,7 +230,7 @@ components:
           description: Timestamp of the meteo information in ISO 8601 format
 ```
 
-Bien maintenant que nous avons notre fichier & Microcks de configuré, nous allons injecter ce fichier dans microcks pour ce faire, allez sur [http://localhost:8585](http://localhost:8585)
+Bien maintenant que nous avons notre fichier & Microcks de configuré, nous allons injecter ce fichier dans microcks pour ce faire, allez sur [http://localhost:8080](http://localhost:8080)
 
 Vous devriez arrivé sur cette page :
 
