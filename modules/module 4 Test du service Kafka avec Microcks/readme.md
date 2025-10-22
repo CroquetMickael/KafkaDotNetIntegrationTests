@@ -40,11 +40,11 @@ async-api.enabled=true
 %docker-compose.io.github.microcks.minion.async.client.MicrocksAPIConnector/mp-rest/url=http://host.docker.internal:8585
 
 # Access to Kafka broker.
-%docker-compose.kafka.bootstrap.servers=kafka:9093
+%docker-compose.kafka.bootstrap.servers=kafka:19092
 
 # Do not save any consumer-offset on the broker as there's a re-sync on each minion startup.
 %docker-compose.mp.messaging.incoming.microcks-services-updates.enable.auto.commit=false
-%docker-compose.mp.messaging.incoming.microcks-services-updates.bootstrap.servers=kafka:9093
+%docker-compose.mp.messaging.incoming.microcks-services-updates.bootstrap.servers=kafka:19092
 
 # Explicitly telling the minion the protocols we want to support
 %docker-compose.minion.supported-bindings=KAFKA,WS
@@ -64,9 +64,9 @@ Cette configuration définit l'URL à laquelle les composants peuvent se connect
 
 Le serveur Kafka est un élément clé pour la gestion des messages dans notre architecture. Nous le spécifions avec la ligne suivante :
 
-`%docker-compose.kafka.bootstrap.servers=kafka:9093`
+`%docker-compose.kafka.bootstrap.servers=kafka:19092`
 
-Ici, kafka représente le nom d'hôte du serveur Kafka, et 9093 est le port sur lequel il écoute. Cela permet aux différents services de se connecter et d'échanger des messages.
+Ici, kafka représente le nom d'hôte du serveur Kafka, et 19092 est le port sur lequel il écoute. Cela permet aux différents services de se connecter et d'échanger des messages.
 
 Une autre configuration importante concerne la gestion des offsets des consommateurs. Nous utilisons la ligne suivante pour désactiver le commit automatique :
 
@@ -76,7 +76,7 @@ En désactivant cette fonctionnalité, nous permettons une re-synchronisation à
 
 Pour les mises à jour des services Microcks, nous devons également spécifier le serveur Kafka :
 
-`%docker-compose.mp.messaging.incoming.microcks-services-updates.bootstrap.servers=kafka:9093`
+`%docker-compose.mp.messaging.incoming.microcks-services-updates.bootstrap.servers=kafka:19092`
 
 Cette ligne indique où se connecter pour recevoir les messages relatifs aux mises à jour, garantissant ainsi que le minion reste à jour avec les informations nécessaires.
 
@@ -92,7 +92,7 @@ Cette ligne précise que le minion peut gérer les communications via Kafka et W
 features.feature.async-api.enabled=true
 features.feature.async-api.frequencies=3,10,30
 features.feature.async-api.default-binding=KAFKA
-features.feature.async-api.endpoint-KAFKA=localhost:9093
+features.feature.async-api.endpoint-KAFKA=localhost:19092
 features.feature.async-api.endpoint-WS=localhost:8081
 ```
 
@@ -116,9 +116,9 @@ Cette ligne indique que le protocole par défaut pour la communication asynchron
 
 La ligne suivante définit le point de terminaison pour Kafka :
 
-`features.feature.async-api.endpoint-KAFKA=localhost:9093`
+`features.feature.async-api.endpoint-KAFKA=localhost:19092`
 
-Ici, localhost:9093 représente l'adresse du serveur Kafka. Cela permet aux services de se connecter à Kafka pour envoyer et recevoir des messages asynchrones.
+Ici, localhost:19092 représente l'adresse du serveur Kafka. Cela permet aux services de se connecter à Kafka pour envoyer et recevoir des messages asynchrones.
 
 Enfin, nous avons la configuration pour le point de terminaison WebSocket :
 

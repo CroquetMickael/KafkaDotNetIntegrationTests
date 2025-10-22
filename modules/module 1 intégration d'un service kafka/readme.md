@@ -226,7 +226,7 @@ builder.Services.AddSingleton(provider =>
 {
     var config = new ConsumerConfig
     {
-        BootstrapServers = "localhost:9093",
+        BootstrapServers = "localhost:19093",
         GroupId = "1",
         AutoOffsetReset = AutoOffsetReset.Earliest
     };
@@ -238,7 +238,7 @@ builder.Services.AddTransient<MeteoHandler>();
 builder.Services.AddHostedService<MeteoConsumerBackgroundService>();
 ```
 
-Comme vous pouvez le constater, nous avons crée un singleton gérant notre connexion au broker Kafka, le `localhost:9093` est récupéré principalement par le port exposé dansnotre `docker-compose.yml`
+Comme vous pouvez le constater, nous avons crée un singleton gérant notre connexion au broker Kafka, le `localhost:19093` est récupéré principalement par le port exposé dansnotre `docker-compose.yml`
 
 Nous démarrons aussi notre background service via `builder.Services.AddHostedService<MeteoConsumerBackgroundService>();`
 
